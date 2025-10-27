@@ -1,8 +1,8 @@
 from langchain_core.prompts import PromptTemplate
 from langchain_core.runnables import RunnablePassthrough, RunnableMap
 from langchain_openai import ChatOpenAI
-from item_retriever import get_item_retriever
-from order_retriever import get_orders_retriever
+from app.item_retriever import get_item_retriever
+from app.order_retriever import get_orders_retriever
 from langchain_core.runnables import RunnableLambda
 import os
 from dotenv import load_dotenv
