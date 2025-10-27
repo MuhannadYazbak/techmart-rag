@@ -1,0 +1,10 @@
+id,name,price,description,photo,quantity
+1,"iPhone 15 Pro",1198,"Apple's flagship smartphone with A17 chip and titanium body.",/images/iphone15pro.jpg,10
+2,"Samsung Galaxy S24 Ultra",1100,"Great High-end Android phone with 200MP camera and S Pen. ",/images/s24ultra.jpg,9
+4,"MacBook Air M3",1300,"Lightweight Apple laptop with M3 chip and Retina display.",/images/mackbook.jpg,2
+5,"Dell XPS 13 Plus",1399,"Sleek Windows ultrabook with InfinityEdge display.",/images/dell.jpg,5
+6,"Lenovo ThinkPad X1 Carbon",1499,"Business-class laptop with legendary keyboard and durability.",/images/lenovo.jpg,0
+7,"Sony Playstation 5",2240,"Gaming Console with two wireless controls",/images/playstation5.jpg,10
+10,"T500 Smart Watch",250,"Unisex smart watch with bluetooth calls and health mentoring",/images/t500.jpg,0
+16,"Xiaomi tab 7 pro",2679,"combines sleek design with powerful performance, making it the perfect companion for work, play, and everything in between",/images/pad7pro.jpg,8
+17,"Google Pixel 8 Pro",2650,"delivers cutting-edge performance with pure Android experience, wrapped in a sleek, modern design",/images/pixel.jpg,2
