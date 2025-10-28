@@ -1,15 +1,26 @@
 from fastapi import FastAPI, Request
 from app.dynamic_agent import build_agent
 from dotenv import load_dotenv
+from fastapi.middleware.cors import CORSMiddleware
+
 app = FastAPI()
 
 load_dotenv()
 
 from pydantic import BaseModel
 
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # Or specify ["http://localhost:3000"] for React, etc.
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+
 class AskRequest(BaseModel):
     query: str
-    user_id: int = 2
+    user_id: int
     
 @app.post("/ask")
 async def ask(data: AskRequest):
