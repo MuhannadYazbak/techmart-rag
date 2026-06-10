@@ -16,14 +16,14 @@ def get_item_retriever():
     # Create SQLAlchemy engine
     engine = create_engine(db_url)
     # Load product data
-    query = "SELECT name, price, description, quantity FROM itemtable"
+    query = "SELECT name, price, description,category, quantity FROM itemtable"
     df = pd.read_sql(query, engine)
     
 
     # Convert rows to LangChain Documents
     docs = [
         Document(
-            page_content=f"Name: {row['name']}\nPrice: {row['price']}\nDescription: {row['description']}\nQuantity: {row['quantity']}",
+            page_content=f"Name: {row['name']}\nPrice: {row['price']}\nDescription: {row['description']}\nCategory:{row['category']}\nQuantity: {row['quantity']}",
             metadata={"name": row["name"]}
         )
         for _, row in df.iterrows()

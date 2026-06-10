@@ -1,0 +1,47 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: techmart-rag-agent
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: techmart-rag-agent
+  template:
+    metadata:
+      labels:
+        app: techmart-rag-agent
+    spec:
+      containers:
+        - name: techmart-rag-agent
+          image: techmart-rag-agent:latest   # replace with your actual image
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8000             # adjust if your RAG service uses a different port
+          env:
+            - name: DB_HOST
+              value: mysql
+            - name: DB_NAME
+              value: ecommerce
+            - name: DB_USER
+              value: techmart
+            - name: DB_PASS
+              value: mypassword
+            - name: OPENROUTER_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: rag-secret
+                  key: openrouter_api_key
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: techmart-rag-agent
+spec:
+  selector:
+    app: techmart-rag-agent
+  ports:
+    - protocol: TCP
+      port: 8000
+      targetPort: 8000
+  type: ClusterIP

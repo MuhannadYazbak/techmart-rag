@@ -1,0 +1,7 @@
+.venv/
+rag_env/
+__pycache__/
+*.pdf
+*.zip
+data/       # If this contains your local vector store or models
+.git/
