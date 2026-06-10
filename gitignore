@@ -5,3 +5,4 @@ __pycache__/
 *.zip
 data/       # If this contains your local vector store or models
 .git/
+*.tar
