@@ -12,7 +12,15 @@ from langchain_community.vectorstores import FAISS
 load_dotenv()
 
 def get_orders_df(user_id):
-    db_url = f"mysql+pymysql://{os.getenv('DB_USER')}:{os.getenv('DB_PASS')}@{os.getenv('DB_HOST')}/{os.getenv('DB_NAME')}"
+    # 💡 Pull all components dynamically from Render Environment Variables
+    user = os.getenv('DB_USER')
+    password = os.getenv('DB_PASS')
+    host = os.getenv('DB_HOST')
+    port = os.getenv('DB_PORT', '3306')  # Defaults to 3306 if not explicitly provided
+    name = os.getenv('DB_NAME')
+
+    # 💡 Build the secure URL to negotiate connection parameters safely with Aiven
+    db_url = f"mysql+pymysql://{user}:{password}@{host}:{port}/{name}?ssl_mode=REQUIRED"
     engine = create_engine(db_url)
 
     # 💡 Defensive practice: cast user_id to int to ensure no SQL injection can slip through the route

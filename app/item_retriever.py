@@ -1,19 +1,17 @@
-from sqlalchemy import create_engine
-import pandas as pd
-from langchain_community.vectorstores import FAISS
-# 💡 Swap out the local heavy HuggingFace engine for a lightweight API connector
-from langchain_openai import OpenAIEmbeddings 
-from langchain_text_splitters import CharacterTextSplitter
-from langchain_core.documents import Document
-import os
-from dotenv import load_dotenv
-
-load_dotenv()
-
 def get_item_retriever():
-    db_url = f"mysql+pymysql://{os.getenv('DB_USER')}:{os.getenv('DB_PASS')}@{os.getenv('DB_HOST')}/{os.getenv('DB_NAME')}"
+    # 💡 Pull all necessary components from your Render Environment Variables
+    user = os.getenv('DB_USER')
+    password = os.getenv('DB_PASS')
+    host = os.getenv('DB_HOST')
+    port = os.getenv('DB_PORT', '3306') # Safely grabs 15411 from Render
+    name = os.getenv('DB_NAME')
+
+    # 💡 Structure the complete URL with port and SSL enforcement
+    db_url = f"mysql+pymysql://{user}:{password}@{host}:{port}/{name}?ssl_mode=REQUIRED"
 
     engine = create_engine(db_url)
+    
+    # --- The rest of your code stays exactly identical ---
     query = "SELECT name, price, description, category, quantity FROM itemtable"
     df = pd.read_sql(query, engine)
     
@@ -28,10 +26,7 @@ def get_item_retriever():
     splitter = CharacterTextSplitter(chunk_size=500, chunk_overlap=50)
     chunks = splitter.split_documents(docs)
 
-    # 💡 Use cloud API embeddings. (Uses zero container memory or disk space!)
-    # This automatically reads your OPENAI_API_KEY from your environment.
     embeddings = OpenAIEmbeddings(model="text-embedding-3-small")
-    
     vectorstore = FAISS.from_documents(chunks, embeddings)
 
     return vectorstore.as_retriever()
