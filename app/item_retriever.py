@@ -1,17 +1,26 @@
+import os 
+from sqlalchemy import create_engine
+import pandas as pd
+from langchain_community.vectorstores import FAISS
+from langchain_openai import OpenAIEmbeddings 
+from langchain_text_splitters import CharacterTextSplitter
+from langchain_core.documents import Document
+from dotenv import load_dotenv
+
+load_dotenv()
+
 def get_item_retriever():
-    # 💡 Pull all necessary components from your Render Environment Variables
+    # 💡 Pull all components dynamically from Render Environment Variables
     user = os.getenv('DB_USER')
     password = os.getenv('DB_PASS')
     host = os.getenv('DB_HOST')
-    port = os.getenv('DB_PORT', '3306') # Safely grabs 15411 from Render
+    port = os.getenv('DB_PORT', '3306')  # Defaults to 3306 if not explicitly provided
     name = os.getenv('DB_NAME')
 
-    # 💡 Structure the complete URL with port and SSL enforcement
+    # 💡 Structure the complete URL with port and SSL enforcement for Aiven
     db_url = f"mysql+pymysql://{user}:{password}@{host}:{port}/{name}?ssl_mode=REQUIRED"
-
     engine = create_engine(db_url)
     
-    # --- The rest of your code stays exactly identical ---
     query = "SELECT name, price, description, category, quantity FROM itemtable"
     df = pd.read_sql(query, engine)
     
