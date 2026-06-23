@@ -11,10 +11,9 @@ from dotenv import load_dotenv
 load_dotenv()
 
 def get_item_retriever():
-    db_url = f"mysql+pymysql://{os.getenv('DB_USER')}:{os.getenv('DB_PASS')}@{os.getenv('DB_HOST')}/{os.getenv('DB_NAME')}??ssl_disabled=false"
+    db_url = f"mysql+pymysql://{os.getenv('DB_USER')}:{os.getenv('DB_PASS')}@{os.getenv('DB_HOST')}/{os.getenv('DB_NAME')}"
 
-    engine = create_engine(db_url, 
-        connect_args={"ssl": {"check_hostname": False}})
+    engine = create_engine(db_url)
     query = "SELECT name, price, description, category, quantity FROM itemtable"
     df = pd.read_sql(query, engine)
     
