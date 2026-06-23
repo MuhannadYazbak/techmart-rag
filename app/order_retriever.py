@@ -1,5 +1,6 @@
 import os
 from sqlalchemy import create_engine
+import urllib.parse
 import pandas as pd
 import os
 from dotenv import load_dotenv
@@ -15,10 +16,11 @@ load_dotenv()
 def get_orders_df(user_id):
     # 💡 Pull all components dynamically from Render Environment Variables
     user = os.getenv('DB_USER')
-    password = os.getenv('DB_PASS')
     host = os.getenv('DB_HOST')
     port = os.getenv('DB_PORT', '3306')
     name = os.getenv('DB_NAME')
+    raw_password = os.getenv('DB_PASS', '')
+    safe_password = urllib.parse.quote_plus(raw_password)
 
     # 💡 Keep the URL completely clean without string-level parameters
     db_url = f"mysql+pymysql://{user}:{password}@{host}:{port}/{name}"

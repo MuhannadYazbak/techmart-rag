@@ -1,5 +1,6 @@
 import os 
 from sqlalchemy import create_engine
+import urllib.parse
 import pandas as pd
 from langchain_community.vectorstores import FAISS
 from langchain_openai import OpenAIEmbeddings 
@@ -12,10 +13,12 @@ load_dotenv()
 def get_item_retriever():
     # 💡 Pull all components dynamically from Render Environment Variables
     user = os.getenv('DB_USER')
-    password = os.getenv('DB_PASS')
     host = os.getenv('DB_HOST')
     port = os.getenv('DB_PORT', '3306')
     name = os.getenv('DB_NAME')
+    raw_password = os.getenv('DB_PASS', '')
+    safe_password = urllib.parse.quote_plus(raw_password)
+
 
     # 💡 Keep the URL completely clean without string-level parameters
     db_url = f"mysql+pymysql://{user}:{password}@{host}:{port}/{name}"
