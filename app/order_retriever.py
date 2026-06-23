@@ -17,12 +17,17 @@ def get_orders_df(user_id):
     user = os.getenv('DB_USER')
     password = os.getenv('DB_PASS')
     host = os.getenv('DB_HOST')
-    port = os.getenv('DB_PORT', '3306')  # Defaults to 3306 if not explicitly provided
+    port = os.getenv('DB_PORT', '3306')
     name = os.getenv('DB_NAME')
 
-    # 💡 Build the secure URL to negotiate connection parameters safely with Aiven
-    db_url = f"mysql+pymysql://{user}:{password}@{host}:{port}/{name}?ssl_mode=REQUIRED"
-    engine = create_engine(db_url)
+    # 💡 Keep the URL completely clean without string-level parameters
+    db_url = f"mysql+pymysql://{user}:{password}@{host}:{port}/{name}"
+    
+    # 💡 Pass the secure configuration explicitly here so PyMySQL handles it natively
+    engine = create_engine(
+        db_url,
+        connect_args={"ssl": {"check_hostname": False}}
+    )
 
     # 💡 Defensive practice: cast user_id to int to ensure no SQL injection can slip through the route
     query = f"SELECT * FROM ordertable WHERE user_id = {int(user_id)}"
