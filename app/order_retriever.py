@@ -12,8 +12,9 @@ from langchain_community.vectorstores import FAISS
 load_dotenv()
 
 def get_orders_df(user_id):
-    db_url = f"mysql+pymysql://{os.getenv('DB_USER')}:{os.getenv('DB_PASS')}@{os.getenv('DB_HOST')}/{os.getenv('DB_NAME')}"
-    engine = create_engine(db_url)
+    db_url = f"mysql+pymysql://{os.getenv('DB_USER')}:{os.getenv('DB_PASS')}@{os.getenv('DB_HOST')}/{os.getenv('DB_NAME')}?ssl_disabled=false"
+    engine = create_engine(db_url, 
+        connect_args={"ssl": {"check_hostname": False}})
 
     # 💡 Defensive practice: cast user_id to int to ensure no SQL injection can slip through the route
     query = f"SELECT * FROM ordertable WHERE user_id = {int(user_id)}"
