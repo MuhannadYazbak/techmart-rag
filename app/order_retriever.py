@@ -1,8 +1,7 @@
 import os
+import urllib.parse  # 💡 Safely handles special characters in passwords
 from sqlalchemy import create_engine
-import urllib.parse
 import pandas as pd
-import os
 from dotenv import load_dotenv
 import json
 from langchain_core.documents import Document
@@ -19,10 +18,12 @@ def get_orders_df(user_id):
     host = os.getenv('DB_HOST')
     port = os.getenv('DB_PORT', '3306')
     name = os.getenv('DB_NAME')
+    
+    # 💡 URL-encode the password and call it 'password' so it matches the string below
     raw_password = os.getenv('DB_PASS', '')
-    safe_password = urllib.parse.quote_plus(raw_password)
+    password = urllib.parse.quote_plus(raw_password)
 
-    # 💡 Keep the URL completely clean without string-level parameters
+    # 💡 Uses the matching 'password' variable cleanly
     db_url = f"mysql+pymysql://{user}:{password}@{host}:{port}/{name}"
     
     # 💡 Pass the secure configuration explicitly here so PyMySQL handles it natively

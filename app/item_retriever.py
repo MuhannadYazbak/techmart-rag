@@ -1,6 +1,6 @@
-import os 
+import os  
+import urllib.parse  # 💡 Escapes special symbols in passwords safely
 from sqlalchemy import create_engine
-import urllib.parse
 import pandas as pd
 from langchain_community.vectorstores import FAISS
 from langchain_openai import OpenAIEmbeddings 
@@ -11,19 +11,18 @@ from dotenv import load_dotenv
 load_dotenv()
 
 def get_item_retriever():
-    # 💡 Pull all components dynamically from Render Environment Variables
     user = os.getenv('DB_USER')
     host = os.getenv('DB_HOST')
-    port = os.getenv('DB_PORT', '3306')
+    port = os.getenv('DB_PORT', '3306')  
     name = os.getenv('DB_NAME')
+    
+    # 💡 Explicitly capture and encode the password variable cleanly
     raw_password = os.getenv('DB_PASS', '')
-    safe_password = urllib.parse.quote_plus(raw_password)
+    password = urllib.parse.quote_plus(raw_password)
 
-
-    # 💡 Keep the URL completely clean without string-level parameters
+    # 💡 Now 'password' matches exactly inside the connection URL layout
     db_url = f"mysql+pymysql://{user}:{password}@{host}:{port}/{name}"
     
-    # 💡 Pass the secure configuration explicitly here so PyMySQL handles it natively
     engine = create_engine(
         db_url,
         connect_args={"ssl": {"check_hostname": False}}
